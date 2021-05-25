@@ -1,0 +1,58 @@
+version: "2.4"
+services:
+    nifi:
+        image: apache/nifi:1.12.0
+        environment:
+            - NIFI_HOME=/opt/nifi/nifi-current
+            - NIFI_LOG_DIR=/opt/nifi/nifi-current/logs
+            - NIFI_TOOLKIT_HOME=/opt/nifi/nifi-toolkit-current
+            - NIFI_PID_DIR=/opt/nifi/nifi-current/run
+            - NIFI_BASE_DIR=/opt/nifi
+            - NIFI_WEB_HTTP_PORT=9300
+        volumes:
+            - nifi-vol:/opt/nifioutput
+        ports:
+            - "9300:9300"
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.1'
+                    memory: 500M
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
+        environment:
+            - discovery.type=single-node
+        ports:
+            - "9200:9200"
+        volumes:
+            - elastic:/usr/share/elasticsearch/data
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.2'
+                    memory: 500M
+    kibana:
+        image: docker.elastic.co/kibana/kibana:7.13.0
+        environment: 
+            - ELASTICSEARCH_HOSTS=http://localhost:9200
+            - ELASTICSEARCH_URL=http://localhost:9200
+        ports:
+            - "5601:5601"
+    postgresql:
+        image: postgres
+        environment:
+            - POSTGRES_PASSWORD=postgres
+        ports:
+            - "5432:5432"
+    pgadmin4:
+        image: dpage/pgadmin4
+        environment:
+            - PGADMIN_DEFAULT_PASSWORD=pgadmin
+            - PGADMIN_DEFAULT_EMAIL=pgadmin@gmail.com
+        ports:
+            - "5050:5050"
+
+
+volumes:
+    nifi-vol:
+    elastic:
