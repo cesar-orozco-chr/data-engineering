@@ -1,3 +1,5 @@
 notebooks/work/.*
 notebooks/work/*.csv
 notebooks/work/*.json
+.DS_store
+*/.DS_store
