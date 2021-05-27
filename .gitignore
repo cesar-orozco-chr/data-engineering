@@ -1,0 +1,3 @@
+notebooks/work/.*
+notebooks/work/*.csv
+notebooks/work/*.json
